@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer className="bg-dark text-center text-white py-4">
       <div className="container">
-        {/* Icone dei social */}
+       
         <div className="row justify-content-center mt-5">
           <div className="col-6">
             <div className="row">
@@ -15,7 +15,7 @@ function Footer() {
                 <FaYoutube size={25} className="footer-icon" />
               </div>
             </div>
-            {/* Link di navigazione */}
+           
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4">
               <div className="col">
                 <div className="row">
@@ -107,18 +107,23 @@ function Footer() {
                 </div>
               </div>
             </div>
-            {/* Bottone */}
+          
             <div className="row">
               <div className="col mb-2">
-                <button
-                  type="button"
-                  className="btn btn-sm footer-button rounded-0 mt-3"
-                >
-                  Service Code
-                </button>
+              <div className="row">
+  <div className="col mb-2">
+    <button
+      type="button"
+      className="btn btn-sm footer-button rounded-0 mt-3"
+    >
+      Service Code
+    </button>
+  </div>
+</div>
+
               </div>
             </div>
-            {/* Copyright */}
+            
             <div className="row">
               <div className="col mb-2 mt-2 copyright">
                 © 1997-2023 Netflix, Inc.

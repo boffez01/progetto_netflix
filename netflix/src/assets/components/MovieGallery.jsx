@@ -1,72 +1,102 @@
-import axios from 'axios';
+import React, { Component } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import './MovieGallery.css';
 
-const MovieGallery = () => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+class MovieGallery extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      films: [],
+      isLoading: true,
+      error: null,
+    };
+  }
 
-  const fetchMovies = async (searchTerm) => {
+  fetchFilms = async (searchTerm) => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get(`http://www.omdbapi.com/?apikey=fd237fa1&s=${searchTerm}`);
-      if (response.data.Response === 'True') {
-        setMovies(response.data.Search);
+      const resp = await fetch(
+        `https://www.omdbapi.com/?s=${searchTerm}&apikey=6a45bde1`
+      );
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.Response === "True") {
+          this.setState({
+            films: data.Search,
+            isLoading: false,
+          });
+        } else {
+          this.setState({ error: data.Error, isLoading: false });
+        }
       } else {
-        setError('No movies found');
+        throw new Error("Failed to fetch");
       }
-    } catch (err) {
-      setError('Error fetching data');
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: error.message, isLoading: false });
     }
   };
 
-  useEffect(() => {
-    fetchMovies('Harry Potter');
-    fetchMovies('Star Wars');
-    fetchMovies('Lord of the Rings');
-  }, []);
+  componentDidMount() {
+    this.fetchFilms(this.props.query);
+  }
 
-  const cardStyle = {
-    width: "100%",
-    height: "250px",
-    overflow: "hidden",
-    border: "none",
-    marginBottom: "15px",
-    transition: "transform 0.3s ease",
-  };
+  render() {
+    const { films, isLoading, error } = this.state;
+    const { title } = this.props;
 
-  const imgStyle = {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  };
+    const cardStyle = {
+      width: "100%",
+      height: "250px",
+      overflow: "hidden",
+      border: "none",
+      marginBottom: "15px",
+      transition: "transform 0.3s ease",
+    };
 
-  return (
-    <div>
-      <Container fluid>
-        <h4>Harry Potter Films</h4>
-        <Row className="d-flex no-gutters flex-nowrap">
-          {loading && <p>Loading...</p>}
-          {error && <p>{error}</p>}
-          {!loading && !error && movies.map((film, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={2} className="d-flex justify-content-center mb-4">
-              <Card className="film-card" style={cardStyle}>
-                <Card.Img variant="top" src={film.Poster} alt={film.Title} style={imgStyle} className="card-img" />
-                <Card.Body>
-                  <Card.Title>{film.Title}</Card.Title>
-                  <Card.Text>{film.Year}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+    const imgStyle = {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    };
 
-        <h4>Star Wars Films</h4>
-        <Row className="d-flex no-gutters flex-nowrap">
-          {!loading && !error && movies.map((film, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={2} className="d-flex justify-content-center mb-4">
-              <Card className="film-card" style={cardStyle}>
-          
+    return (
+      <div className="movie-gallery">
+        <Container fluid>
+          <h4>{title}</h4>
+          <Row className="d-flex no-gutters flex-nowrap">
+            {isLoading && <p>Loading...</p>}
+            {error && <p>Error: {error}</p>}
+            {!isLoading &&
+              !error &&
+              films.map((film, index) => (
+                <Col
+                  key={index}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={2}
+                  className="d-flex justify-content-center mb-4"
+                >
+                  <Card className="film-card" style={cardStyle}>
+                    <Card.Img
+                      variant="top"
+                      src={film.Poster}
+                      alt={film.Title}
+                      style={imgStyle}
+                      className="card-img"
+                    />
+                    <Card.Body>
+                      <Card.Title>{film.Title}</Card.Title>
+                      <Card.Text>{film.Year}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default MovieGallery;

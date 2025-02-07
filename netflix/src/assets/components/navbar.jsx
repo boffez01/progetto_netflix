@@ -1,7 +1,7 @@
 
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { BiSearch, BiBell, BiUserCircle } from "react-icons/bi";
-import './Navbar.css'; // Importa il CSS personalizzato
+import './Navbar.css';
 
 const NavbarComponent = () => {
   return (
@@ -9,7 +9,7 @@ const NavbarComponent = () => {
       <Container fluid>
         <Navbar.Brand href="#">
           <img
-            src="assets/logo.png"
+            src="https://images.ctfassets.net/y2ske730sjqp/1aONibCke6niZhgPxuiilC/2c401b05a07288746ddf3bd3943fbc76/BrandAssets_Logos_01-Wordmark.jpg?w=940"
             alt="Logo"
             style={{ width: "100px", height: "55px" }}
           />
